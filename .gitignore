@@ -1,0 +1,5 @@
+*.lib
+*.exe
+*.exp
+*.ncu-rep
+.vs

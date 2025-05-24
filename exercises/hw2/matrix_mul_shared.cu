@@ -37,15 +37,15 @@ __global__ void mmul(const float *A, const float *B, float *C, int ds) {
     for (int i = 0; i < ds/block_size; i++) {
 
       // Load data into shared memory
-      As[threadIdx.y][threadIdx.x] = A[FIXME];
-      Bs[threadIdx.y][threadIdx.x] = B[FIXME];
+      As[threadIdx.y][threadIdx.x] = A[i * block_size + threadIdx.x + ds * idy];
+      Bs[threadIdx.y][threadIdx.x] = B[(i * block_size + threadIdx.y) * ds + idx];
 
       // Synchronize
       __syncthreads();
 
       // Keep track of the running sum
       for (int k = 0; k < block_size; k++)
-      	temp += As[FIXME][FIXME] * Bs[FIXME][FIXME]; // dot product of row and column
+      	temp += As[threadIdx.y][k] * Bs[k][threadIdx.x]; // dot product of row and column
       __syncthreads();
 
     }
